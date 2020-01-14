@@ -5,20 +5,25 @@ except:
 from constants import *
 from algTools import *
 from drawTools import *
+from display import *
 
 
 if __name__ == "__main__":
     root = Tk()
     root.title("A*")
-    toolsFrame = Frame(root)
+    root.configure(background = BACKGROUND)
+
+    toolsFrame = Frame(root, bg = BACKGROUND)
     toolsFrame.grid(row = 0, column = 0, sticky = N)
 
-    algTools = AlgTools(toolsFrame, 0,0)
+    algTools = AlgTools(toolsFrame, 0,0, BACKGROUND)
 
-    drawTools = DrawTools(toolsFrame, 1,0)
+    drawTools = DrawTools(toolsFrame, 1,0, BACKGROUND)
 
-    canva = Canvas(root, width = CANVAS_WIDTH, height = CANVAS_HEIGHT, bg = "black")
-    canva.grid(row = 0, column = 1)
+    display = Display(root, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
+
+
+
 
 
     root.mainloop()
