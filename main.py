@@ -4,6 +4,7 @@ except:
     from Tkinter import *
 from constants import *
 from algTools import *
+from drawTools import *
 
 
 if __name__ == "__main__":
@@ -14,9 +15,7 @@ if __name__ == "__main__":
 
     algTools = AlgTools(toolsFrame, 0,0)
 
-
-    drawToolsFrame = Frame(toolsFrame, bg = "blue", height = 100, width = 100)
-    drawToolsFrame.grid(row = 1, column = 0, pady = 100)
+    drawTools = DrawTools(toolsFrame, 1,0)
 
     canva = Canvas(root, width = CANVAS_WIDTH, height = CANVAS_HEIGHT, bg = "black")
     canva.grid(row = 0, column = 1)
