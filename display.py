@@ -17,6 +17,7 @@ class Display:
         self.height = height
         self.canvas = Canvas(self.frame, width = self.width, height = self.height)
         self.canvas.pack()
+        self.state = NORMAL
         self.canvas.bind('<Motion>', self.update_mask)
         self.canvas.bind('<B1-Motion>', self.drawNode)
 
@@ -34,27 +35,38 @@ class Display:
                     self.canvas.create_rectangle(x1,y1,x2,y2,fill = self.field.colorMap[self.field.getNode(j,i)])
         self.master.update()
     def update_mask(self, mouse):
-        x, y = mouse.x, mouse.y
-        x = x // (CELL_WIDTH + MARGIN)
-        y = y // (CELL_HEIGHT + MARGIN)
-        self.mask = [[0 for i in range(ROWS)] for j in range(COLUMNS)]
-        if (mouse.x < CANVAS_WIDTH) and (mouse.y < CANVAS_HEIGHT) and (mouse.x >=0) and(mouse.y >= 0):
-            self.mask[y][x] = 1
+        if self.state == NORMAL:
+            x, y = mouse.x, mouse.y
+            x = x // (CELL_WIDTH + MARGIN)
+            y = y // (CELL_HEIGHT + MARGIN)
+            self.mask = [[0 for i in range(ROWS)] for j in range(COLUMNS)]
+            if (mouse.x < CANVAS_WIDTH) and (mouse.y < CANVAS_HEIGHT) and (mouse.x >=0) and(mouse.y >= 0):
+                self.mask[y][x] = 1
 
     def drawNode(self, mouse):
-        self.mask = [[0 for i in range(ROWS)] for j in range(COLUMNS)]
-        x, y = mouse.x, mouse.y
-        x = x // (CELL_WIDTH + MARGIN)
-        y = y // (CELL_HEIGHT + MARGIN)
-        if self.field.getTool() == "start":
-            for i in range(ROWS):
-                for j in range(COLUMNS):
-                    if self.field.getNode(j,i) == "start":
-                        self.field.setNode("empty",j,i)
-        if self.field.getTool() == "end":
-            for i in range(ROWS):
-                for j in range(COLUMNS):
-                    if self.field.getNode(j,i) == "end":
-                        self.field.setNode("empty",j,i)
-        if (mouse.x < CANVAS_WIDTH) and (mouse.y < CANVAS_HEIGHT) and (mouse.x >=0) and(mouse.y >= 0):
-            self.field.setNode(self.field.getTool(),x,y)
+        if self.state == NORMAL:
+            self.mask = [[0 for i in range(ROWS)] for j in range(COLUMNS)]
+            x, y = mouse.x, mouse.y
+            x = x // (CELL_WIDTH + MARGIN)
+            y = y // (CELL_HEIGHT + MARGIN)
+            if self.field.getTool() == "start":
+                for i in range(ROWS):
+                    for j in range(COLUMNS):
+                        if self.field.getNode(j,i) == "start":
+                            self.field.setNode("empty",j,i)
+            if self.field.getTool() == "end":
+                for i in range(ROWS):
+                    for j in range(COLUMNS):
+                        if self.field.getNode(j,i) == "end":
+                            self.field.setNode("empty",j,i)
+            if (mouse.x < CANVAS_WIDTH) and (mouse.y < CANVAS_HEIGHT) and (mouse.x >=0) and(mouse.y >= 0):
+                self.field.setNode(self.field.getTool(),x,y)
+    def flipState(self):
+        if self.state == NORMAL:
+            self.state = DISABLED
+        else:
+            self.state = NORMAL
+        for each in self.buttons:
+            each.configure(state = self.state)
+        for each in self.radioBoxes:
+            each.configure(state = self.state)

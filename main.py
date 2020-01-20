@@ -6,11 +6,8 @@ from constants import *
 from algTools import *
 from drawTools import *
 from display import *
-from grid import *
-import time
-
-
-
+from field import *
+from controller import *
 
 
 
@@ -24,11 +21,13 @@ if __name__ == "__main__":
 
     algTools = AlgTools(toolsFrame, 0,0, BACKGROUND)
 
-    drawField = Grid()
+    drawField = Field()
     drawTools = DrawTools(toolsFrame,drawField ,1,0, BACKGROUND)
-
     display = Display(root,drawField, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
-    drawField.setNode("start",5,5)
+
+
+
+    flip = Controller(toolsFrame, drawTools, algTools, display,2,0)
     while True:
         display.drawGrid()
 

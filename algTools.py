@@ -8,7 +8,6 @@ class AlgTools:
         self.bg = bg
         self.fg = fg
         self.state = DISABLED
-        self.stateConj = NORMAL
 
         self.master = master
         self.frame = Frame(self.master, bg = self.bg)
@@ -23,12 +22,11 @@ class AlgTools:
         for i,each in enumerate(self.buttonSet):
             self.buttons.append(Button(self.buttonFrame, text = self.buttonSet[i], bg = self.bg, fg = self.fg, borderwidth = 0, state = self.state))
             self.buttons[i].grid(row = self.buttonPositions[i][0], column = self.buttonPositions[i][1], sticky = W)
-
-
-if __name__ == "__main__":
-    root = Tk()
-    a = AlgTools(root,0,0)
-
-
-
-    root.mainloop()
+            
+    def flipState(self):
+        if self.state == NORMAL:
+            self.state = DISABLED
+        else:
+            self.state = NORMAL
+        for each in self.buttons:
+            each.configure(state = self.state)

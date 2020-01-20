@@ -59,3 +59,13 @@ class DrawTools:
         for i in range(ROWS):
             for j in range(COLUMNS):
                 self.field.setNode("empty",j,i)
+
+    def flipState(self):
+        if self.state == NORMAL:
+            self.state = DISABLED
+        else:
+            self.state = NORMAL
+        for each in self.buttons:
+            each.configure(state = self.state)
+        for each in self.radioBoxes:
+            each.configure(state = self.state)
