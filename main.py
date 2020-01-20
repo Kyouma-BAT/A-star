@@ -6,6 +6,12 @@ from constants import *
 from algTools import *
 from drawTools import *
 from display import *
+from grid import *
+import time
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -18,11 +24,13 @@ if __name__ == "__main__":
 
     algTools = AlgTools(toolsFrame, 0,0, BACKGROUND)
 
-    drawTools = DrawTools(toolsFrame, 1,0, BACKGROUND)
+    drawField = Grid()
+    drawTools = DrawTools(toolsFrame,drawField ,1,0, BACKGROUND)
 
-    display = Display(root, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
-
-
+    display = Display(root,drawField, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
+    drawField.setNode("start",5,5)
+    while True:
+        display.drawGrid()
 
 
 

@@ -23,3 +23,12 @@ class AlgTools:
         for i,each in enumerate(self.buttonSet):
             self.buttons.append(Button(self.buttonFrame, text = self.buttonSet[i], bg = self.bg, fg = self.fg, borderwidth = 0, state = self.state))
             self.buttons[i].grid(row = self.buttonPositions[i][0], column = self.buttonPositions[i][1], sticky = W)
+
+
+if __name__ == "__main__":
+    root = Tk()
+    a = AlgTools(root,0,0)
+
+
+
+    root.mainloop()

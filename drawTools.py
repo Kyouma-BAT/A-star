@@ -3,14 +3,16 @@ try:
 except:
     from Tkinter import *
 
+from constants import *
+
 
 class DrawTools:
-    def __init__(self, master, r, c, bg = "black", fg = "white"):
+    def __init__(self, master,field,r, c, bg = "black", fg = "white"):
         self.bg = bg
         self.fg = fg
         self.state = NORMAL
         self.choice = IntVar()
-
+        self.field = field
         self.master = master
         self.frame = Frame(self.master, pady = 50, bg = self.bg)
         self.frame.grid(row = r, column = c, sticky = W)
@@ -42,6 +44,18 @@ class DrawTools:
         for i,each in enumerate(self.buttonSet):
             self.buttons.append(Button(self.buttonFrame, text = self.buttonSet[i], bg = self.bg, fg = self.fg, state = self.state))
             self.buttons[i].grid(row = self.buttonPositions[i][0], column = self.buttonPositions[i][1], sticky = W)
+        self.buttons[0].configure(command = self.clear)
 
     def out(self):
-        print(self.choice.get())
+        if self.choice.get() == 0:
+            self.field.setTool("wall")
+        if self.choice.get() == 1:
+            self.field.setTool("empty")
+        if self.choice.get() == 2:
+            self.field.setTool("start")
+        if self.choice.get() == 3:
+            self.field.setTool("end")
+    def clear(self):
+        for i in range(ROWS):
+            for j in range(COLUMNS):
+                self.field.setNode("empty",j,i)
