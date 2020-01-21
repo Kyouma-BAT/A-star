@@ -14,18 +14,6 @@ class Field:
             "path": "blue"
         }
 
-    def findStart(self):
-        for i in range(ROWS):
-            for j in range(COLUMNS):
-                if self.grid[i][j] == "start":
-                    return (j,i)
-
-    def findEnd(self):
-        for i in range(ROWS):
-            for j in range(COLUMNS):
-                if self.grid[i][j] == "end":
-                    return (j,i)
-
 
 
     def setTool(self, tool):
