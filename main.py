@@ -10,27 +10,22 @@ from field import *
 from controller import *
 
 
-
 if __name__ == "__main__":
     root = Tk()
     root.title("A*")
-    root.configure(background = BACKGROUND)
+    root.configure(background=BACKGROUND)
 
-    toolsFrame = Frame(root, bg = BACKGROUND)
-    toolsFrame.grid(row = 0, column = 0, sticky = N)
+    toolsFrame = Frame(root, bg=BACKGROUND)
+    toolsFrame.grid(row=0, column=0, sticky=N)
 
-    algTools = AlgTools(toolsFrame, 0,0, BACKGROUND)
+    algTools = AlgTools(toolsFrame, 0, 0, BACKGROUND)
 
     drawField = Field()
-    drawTools = DrawTools(toolsFrame,drawField ,1,0, BACKGROUND)
-    display = Display(root,drawField, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
+    drawTools = DrawTools(toolsFrame, drawField, 1, 0, BACKGROUND)
+    display = Display(root, drawField, CANVAS_WIDTH, CANVAS_HEIGHT, 0, 1)
 
-
-
-    flip = Controller(toolsFrame, drawTools, algTools, display,2,0)
+    flip = Controller(toolsFrame, drawTools, algTools, display, 2, 0)
     while True:
         display.drawGrid()
-
-
 
     root.mainloop()
