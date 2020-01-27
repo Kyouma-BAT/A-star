@@ -18,14 +18,17 @@ class AlgTools:
         self.title.grid(row=0, column=0, sticky=W)
         self.buttonFrame = Frame(self.frame, bg=self.bg)
         self.buttonFrame.grid(row=1, column=0, sticky=W)
-        self.buttonSet = ["Start", "Stop", "Step", "Run", "Reset"]
-        self.buttonPositions = [(1, 0), (2, 1), (3, 0), (2, 0), (1, 1)]
+        self.buttonSet = ["Stop", "Step", "Run", "Reset"]
+        self.buttonPositions = [(2, 1), (3, 0), (2, 0), (1, 0)]
         self.buttons = []
         for i, each in enumerate(self.buttonSet):
             self.buttons.append(Button(
                 self.buttonFrame, text=self.buttonSet[i], bg=self.bg, fg=self.fg, borderwidth=0, state=self.state))
             self.buttons[i].grid(row=self.buttonPositions[i]
                                  [0], column=self.buttonPositions[i][1], sticky=W)
+
+    def assignFunction(self,button, function):
+        self.buttons[button].configure(command=function)
 
     def flipState(self):
         if self.state == NORMAL:

@@ -1,6 +1,7 @@
 from constants import *
 from field import *
 import math
+import time
 
 
 class Node:
@@ -33,7 +34,7 @@ class Node:
 
     def set_start(self):
         self.start = True
-        self.state = "OPEN"
+        self.state = "open"
 
     def is_traversable(self):
         return self.traversable
@@ -59,20 +60,28 @@ class Astar:
         self.nodes = [[Node(j, i) for j in range(COLUMNS)]for i in range(ROWS)]
         self.open = []
         self.closed = []
-        self.update = print("u")
         self.current = None
         self.found = False
         self.path = []
+        self.updatef = None
 
     def min_f_node(self):
-        return min(self.open,key = lambda x: x.f_cost )
+        return min(self.open, key=lambda x: x.f_cost)
 
+    def update(self):
+        for i in range(ROWS):
+            for j in range(COLUMNS):
+                if self.get_node(j, i).state == "open":
+                    self.f.setNode("open", j, i)
+                if self.get_node(j, i).state == "closed":
+                    self.f.setNode("closed", j, i)
+        self.updatef()
 
     def init_map(self):
         for i in range(ROWS):
             for j in range(COLUMNS):
                 if self.f.getNode(j, i) == "wall":
-                    self.nodes[j][i].notTraversable()
+                    self.nodes[i][j].notTraversable()
                 if self.f.getNode(j, i) == "start":
                     self.nodes[i][j].set_start()
                     self.start = self.nodes[i][j]
@@ -80,18 +89,17 @@ class Astar:
                 if self.f.getNode(j, i) == "end":
                     self.nodes[i][j].set_end()
                     self.end = self.nodes[i][j]
+
     def get_node(self, x, y):
         return self.nodes[y][x]
 
-
-    def setUpdateFunction(self, function):
-        self.update = function
-
-
     def step(self):
+        time.sleep(0.001)
+        self.update()
         self.current = self.min_f_node()
         self.open.remove(self.current)
         self.closed.append(self.current)
+        self.current.state = "closed"
 
         if self.current == self.end:
             return True
@@ -109,21 +117,26 @@ class Astar:
                         neighbour.prevNode = self.current
                         if not(neighbour in self.open):
                             self.open.append(neighbour)
+                            neighbour.state = "open"
             return False
 
     def loop_steps(self):
+        self.init_map()
         while not self.found:
             self.found = self.step()
-        return self.findPath(self.current)
+        path = self.findPath(self.current)
+        for each in path:
+            self.f.setNode("path", each.x, each.y)
 
-    def findPath(self,node):
+        return path
+
+    def findPath(self, node):
         if node == self.start:
             self.path.append(node)
             return self.path
         else:
             self.path.append(node)
             return self.findPath(node.prevNode)
-            
 
     def g_cost(self, node):
         node.g_cost = node.prevNode.g_cost + 1
@@ -148,4 +161,4 @@ if __name__ == "__main__":
 
     a = Astar(f)
     a.init_map()
-    print(list(map(lambda l:(l.x, l.y), a.loop_steps())))
+    print(list(map(lambda l: (l.x, l.y), a.loop_steps())))
