@@ -19,8 +19,8 @@ class Node:
             self.adjacent.remove((x + 1, y))
         if self.y == ROWS - 1:
             self.adjacent.remove((x, y + 1))
-        self.h_cost = 0
         self.g_cost = 0
+        self.h_cost = 0
         self.f_cost = 1000000000
         self.traversable = True
         self.start = False
@@ -89,13 +89,16 @@ class Astar:
                 if self.f.getNode(j, i) == "end":
                     self.nodes[i][j].set_end()
                     self.end = self.nodes[i][j]
+        self.start.h_cost = self.h_cost(self.start)
+        for i in range(ROWS):
+            for j in range(COLUMNS):
+                self.g_cost(self.get_node(j, i))
+                self.h_cost(self.get_node(j, i))
 
     def get_node(self, x, y):
         return self.nodes[y][x]
 
     def step(self):
-        time.sleep(0.001)
-        self.update()
         self.current = self.min_f_node()
         self.open.remove(self.current)
         self.closed.append(self.current)
@@ -107,7 +110,7 @@ class Astar:
             for each in self.current.adjacent:
                 neighbour = self.get_node(each[0], each[1])
                 if (not neighbour.is_traversable()) or (neighbour in self.closed):
-                    o = 0
+                    continue
                 else:
                     predictedH = self.h_cost(neighbour)
                     predictedG = self.current.g_cost + 1
@@ -121,9 +124,13 @@ class Astar:
             return False
 
     def loop_steps(self):
+        k = 0
         self.init_map()
         while not self.found:
+            k += 5
             self.found = self.step()
+            if k % 30 == 0:
+                self.update()
         path = self.findPath(self.current)
         for each in path:
             self.f.setNode("path", each.x, each.y)
@@ -139,9 +146,10 @@ class Astar:
             return self.findPath(node.prevNode)
 
     def g_cost(self, node):
-        node.g_cost = node.prevNode.g_cost + 1
+        x, y = node.getCoords()
+        node.g_cost = math.sqrt((self.start.x - x)**2 + (self.start.y - y)**2)
 
-        return
+        return node.g_cost
 
     def h_cost(self, node):
         x, y = node.getCoords()
