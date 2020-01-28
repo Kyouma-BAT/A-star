@@ -32,7 +32,7 @@ class Display:
                     self.canvas.create_rectangle(x1, y1, x2, y2, fill="gray")
                 else:
                     self.canvas.create_rectangle(
-                        x1, y1, x2, y2, fill=self.field.colorMap[self.field.getNode(j, i)])
+                        x1, y1, x2, y2, fill=self.field.colorMap[self.field.getNode(j, i)], outline = "")
         self.master.update()
 
     def update_mask(self, mouse):

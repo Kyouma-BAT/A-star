@@ -127,9 +127,9 @@ class Astar:
         k = 0
         self.init_map()
         while not self.found:
-            k += 5
+            k += 1
             self.found = self.step()
-            if k % 30 == 0:
+            if k % 5 == 0:
                 self.update()
         path = self.findPath(self.current)
         for each in path:
