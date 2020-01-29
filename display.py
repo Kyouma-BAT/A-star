@@ -68,7 +68,4 @@ class Display:
             self.state = DISABLED
         else:
             self.state = NORMAL
-        for each in self.buttons:
-            each.configure(state=self.state)
-        for each in self.radioBoxes:
-            each.configure(state=self.state)
+        

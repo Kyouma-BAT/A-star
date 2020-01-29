@@ -55,6 +55,7 @@ class Node:
 class Astar:
     def __init__(self, field):
         self.f = field
+        self.alg = 0
         self.start = None
         self.end = None
         self.nodes = [[Node(j, i) for j in range(COLUMNS)]for i in range(ROWS)]
@@ -64,6 +65,7 @@ class Astar:
         self.found = False
         self.path = []
         self.updatef = None
+        self.log = None
 
     def min_f_node(self):
         return min(self.open, key=lambda x: x.f_cost)
@@ -77,7 +79,30 @@ class Astar:
                     self.f.setNode("closed", j, i)
         self.updatef()
 
+    def reset(self):
+        self.path = []
+        self.open = []
+        self.closed = []
+
+        for i in range(ROWS):
+            for j in range(COLUMNS):
+                if self.f.getNode(j,i) == "open":
+                    self.f.setNode("empty",j,i)
+                if self.f.getNode(j,i) == "closed":
+                    self.f.setNode("empty",j,i)
+                if self.f.getNode(j,i) == "path":
+                    self.f.setNode("empty",j,i)
+
+
+        self.nodes = [[Node(j, i) for j in range(COLUMNS)]for i in range(ROWS)]
+        self.found = False
+        self.update()
+
+
+
+
     def init_map(self):
+        self.reset()
         for i in range(ROWS):
             for j in range(COLUMNS):
                 if self.f.getNode(j, i) == "wall":
@@ -92,7 +117,6 @@ class Astar:
         self.start.h_cost = self.h_cost(self.start)
         for i in range(ROWS):
             for j in range(COLUMNS):
-                self.g_cost(self.get_node(j, i))
                 self.h_cost(self.get_node(j, i))
 
     def get_node(self, x, y):
@@ -117,6 +141,7 @@ class Astar:
                     predictedF = predictedG + predictedH
                     if (predictedF < neighbour.f_cost):
                         neighbour.f_cost = predictedF
+                        neighbour.g_cost = predictedG
                         neighbour.prevNode = self.current
                         if not(neighbour in self.open):
                             self.open.append(neighbour)
@@ -126,16 +151,21 @@ class Astar:
     def loop_steps(self):
         k = 0
         self.init_map()
-        while not self.found:
+        while not self.found and len(self.open) > 0:
             k += 1
             self.found = self.step()
-            if k % 5 == 0:
+            if k % 15 == 0:
                 self.update()
-        path = self.findPath(self.current)
-        for each in path:
-            self.f.setNode("path", each.x, each.y)
-
-        return path
+        self.update()
+        if self.found == True:
+            path = self.findPath(self.current)
+            for each in path:
+                self.f.setNode("path", each.x, each.y)
+            self.log("Length: "+str(len(path)))
+        else:
+            self.log("Does Not Exist")
+        self.f.setNode("start", self.start.x, self.start.y)
+        self.f.setNode("end", self.end.x, self.end.y)
 
     def findPath(self, node):
         if node == self.start:
@@ -147,18 +177,24 @@ class Astar:
 
     def g_cost(self, node):
         x, y = node.getCoords()
-        node.g_cost = math.sqrt((self.start.x - x)**2 + (self.start.y - y)**2)
-
+        node.g_cost = abs(self.start.x - x) + abs(self.start.y - y)
         return node.g_cost
 
     def h_cost(self, node):
-        x, y = node.getCoords()
-        node.h_cost = math.sqrt((self.end.x - x)**2 + (self.end.y - y)**2)
-        return node.h_cost
+        if self.alg == 0:
+            x, y = node.getCoords()
+            node.h_cost = math.sqrt((self.end.x - x)**2 + (self.end.y - y)**2)
+            #node.h_cost = abs(self.end.x - x) + abs(self.end.y - y)
+            return node.h_cost
+        if self.alg == 1:
+            return 0
 
     def f_cost(self, node):
         node.f_cost = node.g_cost + node.h_cost
         return node.g_cost + node.h_cost
+
+    def setAlg(self, choice):
+        self.alg = choice
 
 
 if __name__ == "__main__":

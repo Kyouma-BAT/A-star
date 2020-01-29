@@ -37,8 +37,8 @@ class DrawTools:
 
         self.buttonFrame = Frame(self.frame, bg=self.bg)
         self.buttonFrame.grid(row=2, column=0, sticky=W)
-        self.buttonSet = ["Clear", "Save", "Load", "Generate Maze"]
-        self.buttonPositions = [(0, 0), (1, 0), (1, 1), (2,0)]
+        self.buttonSet = ["Clear", "Generate Maze"]
+        self.buttonPositions = [(0, 0), (2,0)]
         self.buttons = []
         for i, each in enumerate(self.buttonSet):
             self.buttons.append(Button(
@@ -48,7 +48,7 @@ class DrawTools:
         self.buttons[0].configure(command=self.clear)
 
     def setMazeCommand(self, function):
-        self.buttons[3].configure(command = function)
+        self.buttons[1].configure(command = function)
 
     def out(self):
         if self.choice.get() == 0:

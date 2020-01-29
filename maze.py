@@ -35,6 +35,7 @@ class Maze:
                 if (node.type != "path") and (self.is_traversable(node)):
                     self.walls.append(node)
         else:
+
             return
 
     def generate_maze(self):
@@ -53,8 +54,22 @@ class Maze:
             node = random.choice(self.walls)
             self.step(node)
             self.walls.remove(node)
-            if k % 40 == 0:
+            if k % 20 == 0:
                 self.update()
+        for i in range(ROWS):
+            for j in range(COLUMNS):
+                k += 1
+                node = self.get_node(j,i)
+                l = 0
+                for each in node.neighbours:
+                    if self.get_node(each[0], each[1]).type == "path":
+                        l += 1
+                if l >= len(node.neighbours):
+                    point = random.choice(node.neighbours)
+                    self.get_node(point[0], point[1]).type = "wall"
+                    self.f.setNode("wall", point[0], point[1])
+                if k % 20 == 0:
+                    self.update()
 
     def setUpdateFunction(self, function):
         self.update = function
@@ -80,7 +95,7 @@ class Maze:
         for each in point.neighbours:
             if self.get_node(each[0], each[1]).type == "path":
                 k += 1
-        if k >= 2:
+        if k >= 3:
             ret = False
 
 
