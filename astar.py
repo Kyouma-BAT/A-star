@@ -151,7 +151,7 @@ class Astar:
         while not self.found and len(self.open) > 0:
             k += 1
             self.found = self.step()
-            if k % 5 == 0:
+            if k % 15 == 0:
                 self.update()
         self.update()
         if self.found == True:
