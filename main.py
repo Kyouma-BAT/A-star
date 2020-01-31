@@ -13,14 +13,11 @@ from maze import *
 import time
 
 
-
-
-
 if __name__ == "__main__":
     root = Tk()
     root.title("A*")
     root.configure(background=BACKGROUND)
-    root.protocol("WM_DELETE_WINDOW",root.destroy)
+    root.protocol("WM_DELETE_WINDOW", root.destroy)
 
     toolsFrame = Frame(root, bg=BACKGROUND)
     toolsFrame.grid(row=0, column=0, sticky=N)

@@ -83,23 +83,20 @@ class Astar:
         self.path = []
         self.open = []
         self.closed = []
+        self.current = None
 
         for i in range(ROWS):
             for j in range(COLUMNS):
-                if self.f.getNode(j,i) == "open":
-                    self.f.setNode("empty",j,i)
-                if self.f.getNode(j,i) == "closed":
-                    self.f.setNode("empty",j,i)
-                if self.f.getNode(j,i) == "path":
-                    self.f.setNode("empty",j,i)
-
+                if self.f.getNode(j, i) == "open":
+                    self.f.setNode("empty", j, i)
+                if self.f.getNode(j, i) == "closed":
+                    self.f.setNode("empty", j, i)
+                if self.f.getNode(j, i) == "path":
+                    self.f.setNode("empty", j, i)
 
         self.nodes = [[Node(j, i) for j in range(COLUMNS)]for i in range(ROWS)]
         self.found = False
         self.update()
-
-
-
 
     def init_map(self):
         self.reset()
@@ -154,14 +151,15 @@ class Astar:
         while not self.found and len(self.open) > 0:
             k += 1
             self.found = self.step()
-            if k % 15 == 0:
+            if k % 5 == 0:
                 self.update()
         self.update()
         if self.found == True:
             path = self.findPath(self.current)
-            for each in path:
+            for each in self.path:
                 self.f.setNode("path", each.x, each.y)
-            self.log("Length: "+str(len(path)))
+                self.update()
+            self.log("Length: " + str(len(path)))
         else:
             self.log("Does Not Exist")
         self.f.setNode("start", self.start.x, self.start.y)
@@ -170,9 +168,11 @@ class Astar:
     def findPath(self, node):
         if node == self.start:
             self.path.append(node)
+            node.state = "path"
             return self.path
         else:
             self.path.append(node)
+            node.state = "path"
             return self.findPath(node.prevNode)
 
     def g_cost(self, node):
